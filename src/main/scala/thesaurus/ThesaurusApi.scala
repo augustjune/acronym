@@ -7,7 +7,6 @@ import akka.stream.Materializer
 import spray.json._
 
 import concurrent.duration._
-import scala.concurrent.Future
 import scala.util.matching.Regex
 
 object ThesaurusApi {
@@ -16,6 +15,10 @@ object ThesaurusApi {
 	private def constructRequest(term: String): HttpRequest = HttpRequest(uri = s"https://www.thesaurus.com/browse/$term")
 
 	private val strictTimeout: FiniteDuration = 3 seconds
+
+	private case class Word(term: String,
+									synonyms: Seq[String], antonyms: Seq[String],
+									usageExamples: Seq[String]) extends ThesaurusWord
 }
 
 class ThesaurusApi(implicit materializer: Materializer) extends Actor {
@@ -67,7 +70,7 @@ class ThesaurusApi(implicit materializer: Materializer) extends Actor {
 				s <- synonyms
 				a <- antonyms
 				e <- examples
-			} yield ThesaurusWord(term, s, a, e)
+			} yield Word(term, s, a, e)
 
 			sender() ! futureWord
 	}

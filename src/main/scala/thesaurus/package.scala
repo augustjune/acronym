@@ -1,8 +1,13 @@
 package object thesaurus {
 	case class WordLookup(term: String)
 
-	case class ThesaurusWord(term: String,
-													 synonyms: Seq[String],
-													 antonyms: Seq[String],
-													 examples: Seq[String])
+	trait ThesaurusWord {
+		def term: String
+
+		def synonyms: Seq[String]
+
+		def antonyms: Seq[String]
+
+		def usageExamples: Seq[String]
+	}
 }
