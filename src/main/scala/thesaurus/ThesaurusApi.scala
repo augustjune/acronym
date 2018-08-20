@@ -16,7 +16,8 @@ object ThesaurusApi {
 	private def constructRequest(term: String): HttpRequest = HttpRequest(uri = s"https://www.thesaurus.com/browse/$term")
 
 	private case class Word(term: String,
-													synonyms: Seq[String], antonyms: Seq[String],
+													synonyms: Seq[String],
+													antonyms: Seq[String],
 													usageExamples: Seq[String]) extends ThesaurusWord
 
 }

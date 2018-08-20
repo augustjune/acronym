@@ -5,11 +5,11 @@ import spray.json._
 import scala.util.matching.Regex
 
 private[thesaurus] object ThesaurusJson {
-	private val wordDataHeader = """<script>window.INITIAL_STATE = """
-	private val wordDataExpression: Regex = (wordDataHeader + """\{.*\}""").r
+	private val wordSectorHeader = """<script>window.INITIAL_STATE = """
+	private val wordSectorExpression: Regex = (wordSectorHeader + """\{.*\}""").r
 
-	def parseExpression(input: String): JsValue = wordDataExpression.findFirstIn(input) match {
-		case Some(jsonSelection) => jsonSelection.substring(wordDataHeader.length).parseJson
+	def parseExpression(input: String): JsValue = wordSectorExpression.findFirstIn(input) match {
+		case Some(jsonSelection) => jsonSelection.substring(wordSectorHeader.length).parseJson
 		case None => throw new RuntimeException("Exception raised during parsing json")
 	}
 
