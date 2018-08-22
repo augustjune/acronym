@@ -13,7 +13,7 @@ object ThesaurusApi {
 
 	private val strictTimeout: FiniteDuration = 3 seconds
 
-	private def constructRequest(term: String): HttpRequest = HttpRequest(uri = s"https://www.thesaurus.com/browse/$term")
+	private def constructRequest(term: String): HttpRequest = HttpRequest(uri = "https://www.thesaurus.com/browse/" + term)
 
 	private case class Word(term: String,
 													synonyms: Seq[String],
@@ -35,15 +35,11 @@ class ThesaurusApi(implicit materializer: Materializer) extends Actor {
 
 			val fieldExtractor = (path: List[String], field: String) => wordData.map(_.extractField(path, field)(_.toString))
 
-			val synonyms = fieldExtractor(List("posTabs", "synonyms"), "term")
-			val antonyms = fieldExtractor(List("posTabs", "antonyms"), "term")
-			val examples = fieldExtractor(List("exampleSentences"), "sentence")
-
 			val futureWord = for {
-				s <- synonyms
-				a <- antonyms
-				e <- examples
-			} yield Word(term, s, a, e)
+				synonyms <- fieldExtractor(List("posTabs", "synonyms"), "term")
+				antonyms <- fieldExtractor(List("posTabs", "antonyms"), "term")
+				examples <- fieldExtractor(List("exampleSentences"), "sentence")
+			} yield Word(term, synonyms, antonyms, examples)
 
 			sender() ! futureWord
 	}
