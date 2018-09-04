@@ -3,6 +3,7 @@ package thesaurus
 import akka.actor.{Actor, Props}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
+import akka.pattern.pipe
 import akka.stream.Materializer
 
 import scala.concurrent.Future
@@ -41,7 +42,7 @@ class ThesaurusApi(implicit materializer: Materializer) extends Actor {
 				examples <- fieldExtractor(List("exampleSentences"), "sentence")
 			} yield Word(term, synonyms, antonyms, examples)
 
-			sender() ! futureWord
+			futureWord pipeTo sender()
 	}
 
 	private def responseData(request: HttpRequest): Future[String] = {
