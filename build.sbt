@@ -15,5 +15,6 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.3"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.2.0"
 
 

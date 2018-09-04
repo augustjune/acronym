@@ -2,15 +2,19 @@ package thesaurus
 
 import spray.json._
 
+import scala.language.implicitConversions
 import scala.util.matching.Regex
 
 private[thesaurus] object ThesaurusJson {
-	private val wordSectorHeader = """<script>window.INITIAL_STATE = """
-	private val wordSectorExpression: Regex = (wordSectorHeader + """\{.*\}""").r
+	private val misspellingRegex = """.*Redirecting to /misspelling\?term=([A-Za-z]*)""".r
+	private val wordSectorExpression: Regex = """<script>window.INITIAL_STATE = \{.*\}""".r
 
-	def parseExpression(input: String): JsValue = wordSectorExpression.findFirstIn(input) match {
-		case Some(jsonSelection) => jsonSelection.substring(wordSectorHeader.length).parseJson
-		case None => throw new RuntimeException("Exception raised during parsing json")
+	def parseExpression(input: String): Either[String, JsValue] = input match {
+		case misspellingRegex(term) => Left(s"Word '$term' has been misspelled")
+		case _ => wordSectorExpression.findFirstMatchIn(input) match {
+			case Some(jsonSelection) => Right(jsonSelection.group(1).parseJson)
+			case None => Left("The structure of response Json is not applicable")
+		}
 	}
 
 	implicit def jsValueToThesaurus(jsValue: JsValue): ThesaurusJson = new ThesaurusJson(jsValue)
