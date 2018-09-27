@@ -10,4 +10,4 @@ import thesaurus._
 ```
 val api = system.actorOf(ThesaurusApi.props)
 ```
-* Use ask pattern along with `WordLookup(word)` to get all data about provided word from Thesaurus.com. As a return you will get `Future[Either[String, ThesaurusWord]]`, which corresponds to successful lookup as right or explicit message about any problems with connection or typo.
+* Use ask pattern along with `WordLookup(word)` to get all data about provided word from Thesaurus.com. As a return you will get `Future[Either[String, ThesaurusWord]]`, which corresponds to successful lookup as Right or explicit message about any problems with connection or typo as Left.
