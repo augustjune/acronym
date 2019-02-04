@@ -7,7 +7,7 @@ import scala.util.matching.Regex
 
 private[thesaurus] object ThesaurusJson {
 	private val misspellingRegex = """.*Redirecting to /misspelling\?term=([A-Za-z]*)""".r
-	private val wordSectorExpression: Regex = """<script>window.INITIAL_STATE = \{.*\}""".r
+	private val wordSectorExpression: Regex = """<script>window.INITIAL_STATE = (\{.*\})""".r
 
 	def parseExpression(input: String): Either[String, JsValue] = input match {
 		case misspellingRegex(term) => Left(s"Word '$term' has been misspelled")
