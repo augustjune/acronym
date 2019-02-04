@@ -37,7 +37,8 @@ class ThesaurusApi(implicit materializer: Materializer) extends Actor {
 			val parsedJson = EitherT(responseData(constructRequest(term)).map(parseExpression))
 			val wordData = parsedJson.map(_.extract(List("searchData", "tunaApiData")))
 
-			val fieldExtractor = (path: List[String], field: String) => wordData.map(_.extractField(path, field)(_.toString))
+			val fieldExtractor = (path: List[String], field: String) =>
+				wordData.map(_.extractField(path, field)(x => removeQuotes(x.toString())))
 
 			val futureWord = for {
 				synonyms <- fieldExtractor(List("posTabs", "synonyms"), "term")
@@ -47,6 +48,8 @@ class ThesaurusApi(implicit materializer: Materializer) extends Actor {
 
 			futureWord.value pipeTo sender()
 	}
+
+	private def removeQuotes(s: String): String = s.substring(1, s.length - 1)
 
 	private def responseData(request: HttpRequest): Future[String] = {
 		for {
