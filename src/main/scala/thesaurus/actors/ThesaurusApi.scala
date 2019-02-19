@@ -1,4 +1,4 @@
-package thesaurus
+package thesaurus.actors
 
 import akka.actor.{Actor, Props}
 import akka.http.scaladsl.Http

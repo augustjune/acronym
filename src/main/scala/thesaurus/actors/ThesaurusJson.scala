@@ -1,4 +1,4 @@
-package thesaurus
+package thesaurus.actors
 
 import spray.json._
 

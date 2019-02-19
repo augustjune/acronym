@@ -1,4 +1,6 @@
-package object thesaurus {
+package thesaurus
+
+package object actors {
 	case class WordLookup(term: String)
 
 	trait ThesaurusWord {
