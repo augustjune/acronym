@@ -25,7 +25,7 @@ class AsyncFlatThesaurus(implicit system: ActorSystem, materializer: Materialize
   def lookup(term: String): FutureStringOr[ThesaurusWord] = {
     val futureWord = responseData(constructRequest(term)).map(ThesaurusData.fromHttpResponse)
 
-    futureWord.map(_.flatMap(_.wordData))
+    futureWord.map(_.flatMap(_.extractWord))
   }
 
   private def responseData(request: HttpRequest): Future[String] = {

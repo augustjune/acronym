@@ -21,40 +21,45 @@ object ThesaurusData {
 }
 
 class ThesaurusData(jsValue: JsValue) {
-  def wordData: Either[String, ThesaurusWord] = Try{
-    val term = removeQuotes(jsValue.asJsObject.fields("searchTerm").toString)
+  def extractWord: Either[String, ThesaurusWord] = for {
+    term <- extractTerm
+    meanings <- extractMeanings
+    examples <- extractExamples
+  } yield ThesaurusWord(term, meanings, examples)
 
+  def extractTerm: Either[String, String] =
+    Try(removeQuotes(jsValue.asJsObject.fields("searchTerm").toString))
+      .toOption.toRight("Problem while extracting the term")
+
+  def extractMeanings: Either[String, Seq[WordMeaning]] = Try {
     val tunaApiData = jsValue.asJsObject.fields("tunaApiData")
-
-    val meanings = tunaApiData.asJsObject.fields("posTabs") match {
+    tunaApiData.asJsObject.fields("posTabs") match {
       case JsArray(postabs) => postabs.map {
         case JsObject(fields) =>
           val definition = removeQuotes(fields("definition").toString())
 
-          val synonyms = fields("synonyms") match {
+          def extractTerms(name: String) = fields(name) match {
             case JsArray(syns) => syns
               .map(_.asJsObject.fields("term").toString())
               .map(removeQuotes)
           }
 
-          val antonyms = fields("antonyms") match {
-            case JsArray(ants) => ants
-              .map(_.asJsObject.fields("term").toString())
-              .map(removeQuotes)
-          }
+          val synonyms = extractTerms("synonyms")
+          val antonyms = extractTerms("antonyms")
 
           WordMeaning(definition, synonyms, antonyms)
       }
     }
+  }.toOption.toRight("Problem while extracting word meanings")
 
-    val examples = tunaApiData.asJsObject.fields("exampleSentences") match {
+  def extractExamples: Either[String, Seq[String]] = Try {
+    val tunaApiData = jsValue.asJsObject.fields("tunaApiData")
+    tunaApiData.asJsObject.fields("exampleSentences") match {
       case JsArray(elements) => elements
         .map(_.asJsObject.fields("sentence").toString())
         .map(removeQuotes)
     }
-
-    ThesaurusWord(term, meanings, examples)
-  }.toOption.toRight("Problem while extracting the values")
+  }.toOption.toRight("Problem while extracting example sentences")
 
   private def removeQuotes(s: String): String = s.substring(1, s.length - 1)
 }
