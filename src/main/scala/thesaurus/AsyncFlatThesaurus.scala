@@ -13,16 +13,16 @@ object AsyncFlatThesaurus {
 
   private def constructRequest(term: String): HttpRequest = HttpRequest(uri = "https://www.thesaurus.com/browse/" + term)
 
-  type FutureStringOr[T] = Future[Either[String, T]]
+  type FutureErrorOr[T] = Future[Either[LookupError, T]]
 }
 
 import thesaurus.AsyncFlatThesaurus._
 
-class AsyncFlatThesaurus(implicit system: ActorSystem, materializer: Materializer) extends ThesaurusAPI[FutureStringOr] {
+class AsyncFlatThesaurus(implicit system: ActorSystem, materializer: Materializer) extends ThesaurusAPI[FutureErrorOr] {
 
   import system.dispatcher
 
-  def lookup(term: String): FutureStringOr[ThesaurusWord] = {
+  def lookup(term: String): FutureErrorOr[ThesaurusWord] = {
     val futureWord = responseData(constructRequest(term)).map(ThesaurusData.fromHttpResponse)
 
     futureWord.map(_.flatMap(_.extractWord))
