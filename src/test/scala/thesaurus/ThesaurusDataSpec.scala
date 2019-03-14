@@ -1,50 +1,46 @@
 package thesaurus
 
+import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatest.WordSpec
+import pureconfig.ConfigReader.Result
 
 import scala.io.Source
+import pureconfig.generic.auto.exportReader
 
 class ThesaurusDataSpec extends WordSpec {
-  def readFromFile(path: String): String = {
-    Source.fromFile(getClass.getResource(path).toURI).mkString
-  }
 
+  def resourceContent(path: String): String =
+    Source.fromFile(getClass.getResource(path).toURI).mkString
+
+  def config(path: String): Config = ConfigFactory.parseResources(path)
 
   "A Thesaurus data" when {
-    "is created" should {
+    "is being created" should {
       "handle any string" in {
         assert(ThesaurusData.fromHttpResponse("").isLeft)
         assert(ThesaurusData.fromHttpResponse("asdasd").isLeft)
       }
 
       "handle misspelled redirection" in {
-        assertResult(ThesaurusData.fromHttpResponse(readFromFile("/cached/misspelled")))(Left(Misspelling("misspelledd")))
+        val expected: Result[LookupError] =
+          pureconfig.loadConfig[Misspelling](config("words/misspelled.conf"))
+        val parsed = ThesaurusData.fromHttpResponse(resourceContent("/cached/misspelled"))
+        assert(expected.swap == parsed)
       }
 
       "parse proper response" in {
-        assert(ThesaurusData.fromHttpResponse(readFromFile("/cached/convenient")).isRight)
+        assert(ThesaurusData.fromHttpResponse(resourceContent("/cached/taken")).isRight)
       }
     }
 
     "is read" should {
-      val parsedData = ThesaurusData.fromHttpResponse(readFromFile("/cached/taken"))
+      val parsedData = ThesaurusData.fromHttpResponse(resourceContent("/cached/taken"))
 
-      "extract term" in {
-        val eitherTerm = for (data <- parsedData; word <- data.extractWord) yield word.term
-        assert(eitherTerm == Right("taken"))
-      }
-
-      "extract meanings" in {
-        val eitherMeanings = for (data <- parsedData; word <- data.extractWord) yield word.meanings
+      "extract word data" in {
+        val parsed = parsedData.flatMap(_.extractWord)
+        val expected = pureconfig.loadConfig[ThesaurusWord](config("words/taken.conf"))
+        assert(expected == parsed)
       }
     }
-
-    /*"extract meanings" in {
-      assert(parsedData.flatMap(_.extractWord).isRight)
-      parsedData.flatMap(_.extractWord) match {
-        case Left(value) => fail()
-        case Right(value) =>
-      }
-    }*/
   }
 }
