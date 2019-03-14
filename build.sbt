@@ -21,5 +21,5 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.3"
 
-libraryDependencies += "com.github.pureconfig" %% "pureconfig" % "0.10.2"
+libraryDependencies += "com.github.pureconfig" %% "pureconfig" % "0.10.2" % Test
 
