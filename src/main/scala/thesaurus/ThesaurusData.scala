@@ -29,7 +29,7 @@ class ThesaurusData(jsValue: JsValue) {
 
   def extractTerm: Either[LookupError, String] =
     Try(removeQuotes(jsValue.asJsObject.fields("searchTerm").toString))
-      .toOption.toRight(JsonParsingError("Problem while extracting the term"))
+      .toEither.left.map(_ => JsonParsingError("Problem while extracting the term"))
 
   def extractMeanings: Either[LookupError, Seq[WordMeaning]] = Try {
     val tunaApiData = jsValue.asJsObject.fields("tunaApiData")
@@ -50,7 +50,7 @@ class ThesaurusData(jsValue: JsValue) {
           WordMeaning(definition, synonyms, antonyms)
       }
     }
-  }.toOption.toRight(JsonParsingError("Problem while extracting word meanings"))
+  }.toEither.left.map(_ => JsonParsingError("Problem while extracting word meanings"))
 
   def extractExamples: Either[LookupError, Seq[String]] = Try {
     val tunaApiData = jsValue.asJsObject.fields("tunaApiData")
@@ -59,7 +59,7 @@ class ThesaurusData(jsValue: JsValue) {
         .map(_.asJsObject.fields("sentence").toString())
         .map(removeQuotes)
     }
-  }.toOption.toRight(JsonParsingError("Problem while extracting example sentences"))
+  }.toEither.left.map(_ => JsonParsingError("Problem while extracting example sentences"))
 
   private def removeQuotes(s: String): String = s.substring(1, s.length - 1)
 }
