@@ -14,10 +14,7 @@ libraryDependencies ++= Seq(
 	"org.scalatest" %% "scalatest" % "3.0.5" % "test"
 )
 
-libraryDependencies ++= Seq(
-	"com.typesafe.akka" %% "akka-http" % "10.1.3",
-	"com.typesafe.akka" %% "akka-stream" % "2.5.14"
-)
+libraryDependencies += "com.softwaremill.sttp" %% "core" % "1.5.11"
 
 libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.3"
 

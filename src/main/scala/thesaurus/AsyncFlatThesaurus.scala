@@ -1,25 +1,19 @@
 package thesaurus
 
-import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
-import akka.stream.Materializer
-import akka.util.Timeout
+import com.softwaremill.sttp._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 object AsyncFlatThesaurus {
-  private def constructRequest(term: String): HttpRequest = HttpRequest(uri = "https://www.thesaurus.com/browse/" + term)
+  private def constructRequest(term: String): Request[String, Nothing] = sttp.get(uri"https://www.thesaurus.com/browse/term")
 
   type FutureErrorOr[T] = Future[Either[LookupError, T]]
 }
 
 import thesaurus.AsyncFlatThesaurus._
 
-class AsyncFlatThesaurus(implicit system: ActorSystem, materializer: Materializer, timeout: Timeout)
+class AsyncFlatThesaurus(implicit backend: SttpBackend[Id, Nothing], executionContext: ExecutionContext)
   extends ThesaurusAPI[FutureErrorOr] {
-
-  import system.dispatcher
 
   def lookup(term: String): FutureErrorOr[ThesaurusWord] = {
     if (term.isEmpty) Future.successful(Left(NoWordProvided))
@@ -28,9 +22,7 @@ class AsyncFlatThesaurus(implicit system: ActorSystem, materializer: Materialize
         .map(response => ThesaurusData.fromHttpResponse(response).flatMap(_.extractWord))
   }
 
-  private def responseData(request: HttpRequest): Future[String] =
-    for {
-      HttpResponse(_, _, entity, _) <- Http().singleRequest(request)
-      strict <- entity.toStrict(timeout.duration)
-    } yield strict.data.utf8String
+  private def responseData(request: Request[String, Nothing]): Future[String] = Future {
+    request.send.unsafeBody
+  }
 }
