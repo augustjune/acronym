@@ -1,8 +1,6 @@
-package object thesaurus {
+package thesaurus
 
-  trait ThesaurusAPI[F[_]] {
-    def lookup(term: String): F[ThesaurusWord]
-  }
+package object api {
 
   case class ThesaurusWord(term: String, meanings: Seq[WordMeaning], usageExamples: Seq[String])
 
