@@ -1,4 +1,4 @@
-package thesaurus
+package thesaurus.api
 
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatest.WordSpec
@@ -7,7 +7,7 @@ import pureconfig.ConfigReader.Result
 import scala.io.Source
 import pureconfig.generic.auto.exportReader
 
-class ThesaurusDataSpec extends WordSpec {
+class ThesaurusResponseSpec extends WordSpec {
 
   def resourceContent(path: String): String =
     Source.fromFile(getClass.getResource(path).toURI).mkString
@@ -17,24 +17,24 @@ class ThesaurusDataSpec extends WordSpec {
   "A Thesaurus data" when {
     "is being created" should {
       "handle any string" in {
-        assert(ThesaurusData.fromHttpResponse("").isLeft)
-        assert(ThesaurusData.fromHttpResponse("asdasd").isLeft)
+        assert(ThesaurusResponse.fromHttpResponse("").isLeft)
+        assert(ThesaurusResponse.fromHttpResponse("asdasd").isLeft)
       }
 
       "handle misspelled redirection" in {
         val expected: Result[LookupError] =
           pureconfig.loadConfig[Misspelling](config("words/misspelled.conf"))
-        val parsed = ThesaurusData.fromHttpResponse(resourceContent("/cached/misspelled"))
+        val parsed = ThesaurusResponse.fromHttpResponse(resourceContent("/cached/misspelled"))
         assert(expected.swap == parsed)
       }
 
       "parse proper response" in {
-        assert(ThesaurusData.fromHttpResponse(resourceContent("/cached/taken")).isRight)
+        assert(ThesaurusResponse.fromHttpResponse(resourceContent("/cached/taken")).isRight)
       }
     }
 
     "is read" should {
-      val parsedData = ThesaurusData.fromHttpResponse(resourceContent("/cached/taken"))
+      val parsedData = ThesaurusResponse.fromHttpResponse(resourceContent("/cached/taken"))
 
       "extract word data" in {
         val parsed = parsedData.flatMap(_.extractWord)
