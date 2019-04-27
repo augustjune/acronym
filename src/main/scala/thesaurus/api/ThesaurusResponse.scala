@@ -21,17 +21,17 @@ private[api] object ThesaurusResponse {
 }
 
 private[api] class ThesaurusResponse(json: Config) {
-  def extractWord: Either[LookupError, ThesaurusWord] = for {
+  def extractWord: LookupErrorOr[ThesaurusWord] = for {
     term <- extractTerm
     meanings <- extractMeanings
     examples <- extractExamples
   } yield ThesaurusWord(term, meanings, examples)
 
-  def extractTerm: Either[LookupError, String] =
+  def extractTerm: LookupErrorOr[String] =
     Try(json.getString("searchData.searchTerm"))
       .toEither.left.map(_ => JsonParsingError("Problem while extracting the term"))
 
-  def extractMeanings: Either[LookupError, Seq[WordMeaning]] = Try {
+  def extractMeanings: LookupErrorOr[Seq[WordMeaning]] = Try {
     json.getConfigList("searchData.tunaApiData.posTabs").asScala.toList.map {
       tab =>
         val definition = tab.getString("definition")
@@ -42,7 +42,7 @@ private[api] class ThesaurusResponse(json: Config) {
     }
   }.toEither.left.map(_ => JsonParsingError("Problem while extracting word meanings"))
 
-  def extractExamples: Either[LookupError, Seq[String]] = Try {
+  def extractExamples: LookupErrorOr[Seq[String]] = Try {
     json.getConfigList("searchData.tunaApiData.exampleSentences")
       .asScala.toList.map(_.getString("sentence"))
   }.toEither.left.map(_ => JsonParsingError("Problem while extracting example sentences"))
