@@ -14,14 +14,18 @@ import thesaurus.api.Thesaurus._
 
 class Thesaurus(implicit backend: SttpBackend[Id, Nothing], executionContext: ExecutionContext) {
 
-  def lookup(term: String): FutureErrorOr[ThesaurusWord] = {
+  def lookup(term: String): FutureErrorOr[ThesaurusWord] =
     if (term.isEmpty) Future.successful(Left(NoWordProvided))
     else
-      responseData(constructRequest(term))
-        .map(response => ThesaurusResponse.fromHttpResponse(response).flatMap(_.extractWord))
-  }
+      responseData(constructRequest(term)).map { futureResp =>
+        for {
+          httpResponse <- futureResp
+          thesaurusData <- ThesaurusResponse.fromHttpResponse(httpResponse)
+          word <- thesaurusData.extractWord
+        } yield word
+      }
 
-  private def responseData(request: Request[String, Nothing]): Future[String] = Future {
-    request.send.unsafeBody
+  private def responseData(request: Request[String, Nothing]): FutureErrorOr[String] = Future {
+    request.send.body.left.map(ServerError)
   }
 }
