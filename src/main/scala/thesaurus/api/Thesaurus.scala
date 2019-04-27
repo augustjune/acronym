@@ -15,10 +15,10 @@ class Thesaurus(implicit backend: SttpBackend[Id, Nothing], executionContext: Ex
     * Returns synonyms and antonyms in different contexts,
     * as well as usage examples of the provided term
     */
-  def lookup(term: String): FutureErrorOr[ThesaurusWord] =
+  def lookup(term: String): Future[LookupErrorOr[ThesaurusWord]] =
     if (term.isEmpty) Future.successful(Left(NoWordProvided))
     else
-      responseData(constructRequest(term)).map { futureResp =>
+      responseData(request(term)).map { futureResp =>
         for {
           httpResponse <- futureResp
           thesaurusData <- ThesaurusResponse.fromHttpResponse(httpResponse)
@@ -26,14 +26,12 @@ class Thesaurus(implicit backend: SttpBackend[Id, Nothing], executionContext: Ex
         } yield word
       }
 
-  private def responseData(request: Request[String, Nothing]): FutureErrorOr[String] = Future {
+  private def responseData(request: Request[String, Nothing]): Future[LookupErrorOr[String]] = Future {
     request.send.body.left.map(ServerError)
   }
 }
 
 object Thesaurus {
-  private def constructRequest(term: String): Request[String, Nothing] =
+  private def request(term: String): Request[String, Nothing] =
     sttp.get(uri"https://www.thesaurus.com/browse/term")
-
-  type FutureErrorOr[T] = Future[Either[LookupError, T]]
 }
