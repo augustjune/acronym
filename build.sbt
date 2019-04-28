@@ -10,6 +10,7 @@ scalacOptions ++= Seq(
 
 libraryDependencies ++= Seq(
   "com.softwaremill.sttp"   %% "core"       % "1.5.11",
+  "org.typelevel"           %% "cats-core"  % "1.6.0",
   "com.typesafe"            % "config"      % "1.3.4",
 )
 
