@@ -1,13 +1,15 @@
 # thesaurus-api
-Thesaraus API provides actor-based async scala wrapper for getting synonyms, antonyms and sentence examples for a given word from Thesaurus.com
+[![Build Status](https://travis-ci.com/augustjune/thesaurus-api.svg?branch=master)](https://travis-ci.com/augustjune/thesaurus-api)
+
+Thesaurus API provides asynchronous search of synonyms, 
+antonyms and usage examples of provided word.
 
 ## Getting started
-* Package `thesaurus` contains all declarations you need, so you can directly import it
+Package `thesaurus.api` contains all declarations you need, 
+so you can directly import and use it.
 ```
-import thesaurus._
+import thesaurus.api._
+
+val thesaurus = new Thesaurus()
+val word = thesaurus.lookup("crucial")
 ```
-* Create an actor from `ThesaurusApi.props`
-```
-val api = system.actorOf(ThesaurusApi.props)
-```
-* Use ask pattern along with `WordLookup(word)` to get all data about provided word from Thesaurus.com. As a return you will get `Future[Either[String, ThesaurusWord]]`, which corresponds to successful lookup as Right or explicit message about any problems with connection or typo as Left.
