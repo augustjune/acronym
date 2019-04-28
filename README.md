@@ -1,15 +1,19 @@
-# thesaurus-api
+# acronym
 [![Build Status](https://travis-ci.com/augustjune/thesaurus-api.svg?branch=master)](https://travis-ci.com/augustjune/thesaurus-api)
 
-Thesaurus API provides asynchronous search of synonyms, 
-antonyms and usage examples of provided word.
+**acronym** is a scala API for thesaurus.com, 
+which provides a list of synonyms, antonyms and usage examples for a given word.
 
 ## Getting started
-Package `thesaurus.api` contains all declarations you need, 
+Package `acronym` contains all declarations you need, 
 so you can directly import and use it.
-```
-import thesaurus.api._
 
-val thesaurus = new Thesaurus()
-val word = thesaurus.lookup("crucial")
+```scala
+import com.softwaremill.sttp.HttpURLConnectionBackend
+import acronym._
+
+implicit val backend = HttpURLConnectionBackend()
+
+val thesaurusApi = new Thesaurus()
+val word = thesaurusApi.lookup("convenient")
 ```

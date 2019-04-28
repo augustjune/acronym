@@ -1,11 +1,13 @@
-package thesaurus.api
+package acronym
 
 import cats.Applicative
 import com.softwaremill.sttp._
-import thesaurus.api.Thesaurus._
+import Thesaurus._
 
 /**
   * Representation of Thesaurus service
+  *
+  * @tparam F Effect, which return information is wrapped in
   */
 class Thesaurus[F[_]](implicit F: Applicative[F], backend: SttpBackend[F, Nothing]) {
 

@@ -1,6 +1,4 @@
-package thesaurus
-
-package object api {
+package object acronym {
 
   type LookupErrorOr[A] = Either[LookupError, A]
 

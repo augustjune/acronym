@@ -1,4 +1,4 @@
-package thesaurus.api
+package acronym
 
 sealed trait LookupError
 

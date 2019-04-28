@@ -1,4 +1,4 @@
-package thesaurus.api
+package acronym
 
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatest.WordSpec

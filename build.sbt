@@ -1,4 +1,4 @@
-name := "thesaurus-api"
+name := "acronym"
 
 version := "0.1"
 

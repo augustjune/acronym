@@ -1,11 +1,11 @@
-package thesaurus.api
+package acronym
 
 import com.typesafe.config.{Config, ConfigFactory}
 
 import scala.collection.JavaConverters._
 import scala.util.Try
 
-private[api] object ThesaurusResponse {
+private[acronym] object ThesaurusResponse {
   private val misspellingRegex = """.*Redirecting to /misspelling\?term=([A-Za-z]*)""".r
   private val wordSectorExpression = """<script>window.INITIAL_STATE = (\{.*\})""".r
 
@@ -20,7 +20,7 @@ private[api] object ThesaurusResponse {
   }
 }
 
-private[api] class ThesaurusResponse(json: Config) {
+private[acronym] class ThesaurusResponse(json: Config) {
   def extractWord: LookupErrorOr[ThesaurusWord] = for {
     term <- extractTerm
     meanings <- extractMeanings
