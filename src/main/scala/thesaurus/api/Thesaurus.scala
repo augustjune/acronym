@@ -30,5 +30,5 @@ class Thesaurus[F[_]](implicit F: Applicative[F], backend: SttpBackend[F, Nothin
 
 object Thesaurus {
   private def request(term: String): Request[String, Nothing] =
-    sttp.get(uri"https://www.thesaurus.com/browse/term")
+    sttp.get(uri"https://www.thesaurus.com/browse/$term")
 }
