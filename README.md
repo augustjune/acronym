@@ -1,5 +1,5 @@
 # acronym
-[![Build Status](https://travis-ci.com/augustjune/thesaurus-api.svg?branch=master)](https://travis-ci.com/augustjune/thesaurus-api)
+[![Build Status](https://travis-ci.com/augustjune/acronym.svg?branch=master)](https://travis-ci.com/augustjune/acronym)
 
 **acronym** is a scala API for thesaurus.com, 
 which provides a list of synonyms, antonyms and usage examples for a given word.
