@@ -4,8 +4,8 @@ import com.softwaremill.sttp.HttpURLConnectionBackend
 import org.scalatest._
 
 class ThesaurusIT extends FunSuite with Matchers {
-  implicit val backend = HttpURLConnectionBackend()
-  val thesaurus = new Thesaurus()
+  private implicit val backend = HttpURLConnectionBackend()
+  private val thesaurus = new Thesaurus()
 
   test("should read existing the word from service") {
     assert(thesaurus.lookup("word").isRight)

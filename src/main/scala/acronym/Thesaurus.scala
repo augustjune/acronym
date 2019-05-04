@@ -21,8 +21,8 @@ class Thesaurus[F[_]](implicit F: Applicative[F], backend: SttpBackend[F, Nothin
       F.map(responseData(request(term))) { reply =>
         for {
           httpResponse <- reply
-          thesaurusData <- ThesaurusResponse.fromHttpResponse(httpResponse)
-          word <- thesaurusData.extractWord
+          data = ThesaurusResponse.fromHttpResponse(httpResponse)
+          word <- data.extractWord
         } yield word
       }
 

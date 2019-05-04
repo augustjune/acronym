@@ -1,1 +1,133 @@
-Moved Permanently. Redirecting to /misspelling?term=misspelledd
+{
+  "routerReducer": {
+    "location": null
+  },
+  "searchData": {
+    "isFetchingTunaApi": false,
+    "isFetchingSpellSuggestion": false,
+    "isFetchingRelatedWordsApi": false,
+    "searchTerm": "mispelled",
+    "tunaApiData": null,
+    "relatedWordsApiData": null,
+    "spellSuggestionsData": [
+      {
+        "term": "misspelled",
+        "targetTerm": "misspelled",
+        "targetSlug": "misspelled"
+      },
+      {
+        "term": "dispelled",
+        "targetTerm": "dispelled",
+        "targetSlug": "dispelled"
+      },
+      {
+        "term": "spelled",
+        "targetTerm": "spelled",
+        "targetSlug": "spelled"
+      },
+      {
+        "term": "misapplied",
+        "targetTerm": "misapplied",
+        "targetSlug": "misapplied"
+      },
+      {
+        "term": "is pulled",
+        "targetTerm": "is pulled",
+        "targetSlug": "is pulled"
+      },
+      {
+        "term": "mis applied",
+        "targetTerm": "mis applied",
+        "targetSlug": "mis applied"
+      }
+    ],
+    "queryParams": {},
+    "url": "/misspelling?term=mispelled",
+    "pushToHistory": true,
+    "fromSearchBar": false,
+    "pageTransitionCounter": 1,
+    "pageName": "misspelling"
+  },
+  "hamburgerMenu": {
+    "isHamburgerMenuOpen": false
+  },
+  "posTabs": {
+    "activeIndex": 0
+  },
+  "wordGridFilters": {
+    "sortType": "SORT_TYPE_RELEVANCE",
+    "lengthFilterValue": 1
+  },
+  "editorialData": {
+    "isFetching": false,
+    "data": [
+      {
+        "name": "Tcom SERP | Pos. 1 | Is It “Blonde” Or “Blond”?",
+        "position": 1,
+        "title": "Is It “Blonde” Or “Blond”?",
+        "url": "https://www.dictionary.com/e/blond-vs-blonde/?param=TcomSERP-mid3",
+        "image": "//images.ctfassets.net/55tpbg0qcsp4/5KhCKVsKhaIeWwWCuK26oI/ffdb42daad28898dd52b2e04b48c2215/1000x700-blond-blonde__1_.jpg?w=284&h=240"
+      },
+      {
+        "name": "Tcom SERP | Pos. 2 | Why We Need Better Terms For People Who Identify As Two Or More Races",
+        "position": 2,
+        "title": "Why We Need Better Terms For People Who Identify As Two Or More Races",
+        "url": "https://www.dictionary.com/e/when-mixed-isnt-enough/?param=TcomSERP-mid2",
+        "image": "//images.ctfassets.net/55tpbg0qcsp4/6XApkF1320sICSogS4ouUg/0179d58055df9b1f4aa8d06a4e286e6f/1000x700-mixed-race.jpg?w=284&h=240"
+      },
+      {
+        "name": "Tcom SERP | Pos. 3 | Playful Words That Jane Austen Popularized",
+        "position": 3,
+        "title": "Playful Words That Jane Austen Popularized",
+        "url": "https://www.dictionary.com/e/austen-neologisms/?param=tcomserp-mid1",
+        "image": "//images.ctfassets.net/55tpbg0qcsp4/b5BLtjSjPuEP229jkvbnk/4676a4415a552efd35d1325e7c6e394e/1000x700-jane-austen__1_.jpg?w=284&h=240"
+      },
+      {
+        "name": "Tcom SERP | Pos. 4 | How Do You Use The Word “Myriad”?",
+        "position": 4,
+        "title": "How Do You Use The Word “Myriad”?",
+        "url": "https://www.dictionary.com/e/how-do-you-use-the-word-myriad/?param=TcomSERP-mid4",
+        "image": "//images.ctfassets.net/55tpbg0qcsp4/4Dv5jfCu1G0oA0K2mw62Ci/1abb0347aac6939b995fa48782d1413c/1000x700-myriad__1_.jpg?w=284&h=240"
+      },
+      {
+        "name": "Test 5",
+        "position": 5,
+        "title": "Test 5",
+        "url": "http://www.dictionary.com/e/",
+        "image": "//images.ctfassets.net/55tpbg0qcsp4/6PGvIkMxt6EoiY2gM0GMQW/068fb221bba6a8feb8e5a79a70de812c/creative_costumes_286.jpg?w=284&h=240"
+      },
+      {
+        "name": "Test 6",
+        "position": 6,
+        "title": "Test 6",
+        "url": "http://www.dictionary.com/e/",
+        "image": "//images.ctfassets.net/55tpbg0qcsp4/URMC6DXPS6wiwUEKiOEGI/eb02105ecf9b6dd6188908672c498ca6/vomitoriums_puke_cta_.jpg?w=284&h=240"
+      },
+      {
+        "name": "Test 7",
+        "position": 7,
+        "title": "16 Funny Words You Probably Don't Know",
+        "url": "http://blog.dictionary.com/16-funny-words-you-probably-dont-know",
+        "image": "//images.ctfassets.net/55tpbg0qcsp4/kKP4z6IrxmqguyuOCMIia/2aab68fa99694db4d58a964c1a869347/funniest_words_HP.jpg?w=284&h=240"
+      },
+      {
+        "name": "Test 8",
+        "position": 8,
+        "title": "Test 8",
+        "url": "http://www.dictionary.com/e/",
+        "image": "//images.ctfassets.net/55tpbg0qcsp4/5rWXD155Nms2eK4gy8Oiog/c4f35596a6e0a5f04295cdc7d22bb349/hangry_286x240.jpg?w=284&h=240"
+      }
+    ]
+  },
+  "detectedDevice": {
+    "isMobile": false,
+    "isTablet": false
+  },
+  "ads": {},
+  "localization": {
+    "isEU": true
+  },
+  "mup": {
+    "isFetching": false
+  }
+}

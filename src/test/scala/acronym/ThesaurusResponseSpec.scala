@@ -17,19 +17,19 @@ class ThesaurusResponseSpec extends WordSpec {
   "A Thesaurus data" when {
     "is being created" should {
       "handle any string" in {
-        assert(ThesaurusResponse.fromHttpResponse("").isLeft)
-        assert(ThesaurusResponse.fromHttpResponse("asdasd").isLeft)
+        assert(ThesaurusResponse.fromHttpResponse("").extractWord.isLeft)
+        assert(ThesaurusResponse.fromHttpResponse("asdasd").extractWord.isLeft)
       }
 
       "handle misspelled redirection" in {
         val expected: Result[LookupError] =
           pureconfig.loadConfig[Misspelling](config("words/misspelled.conf"))
-        val parsed = ThesaurusResponse.fromHttpResponse(resourceContent("/cached/misspelled"))
-        assert(expected.swap == parsed)
+        val parsed = ThesaurusResponse.fromHttpResponse(resourceContent("/cached/misspelled")).extractWord
+        assert(expected.right.get == parsed.left.get)
       }
 
       "parse proper response" in {
-        assert(ThesaurusResponse.fromHttpResponse(resourceContent("/cached/taken")).isRight)
+        assert(ThesaurusResponse.fromHttpResponse(resourceContent("/cached/taken")).extractWord.isRight)
       }
     }
 
@@ -37,7 +37,7 @@ class ThesaurusResponseSpec extends WordSpec {
       val parsedData = ThesaurusResponse.fromHttpResponse(resourceContent("/cached/taken"))
 
       "extract word data" in {
-        val parsed = parsedData.flatMap(_.extractWord)
+        val parsed = parsedData.extractWord
         val expected = pureconfig.loadConfig[ThesaurusWord](config("words/taken.conf"))
         assert(expected == parsed)
       }
