@@ -6,18 +6,19 @@ import scala.collection.JavaConverters._
 import scala.util.Try
 
 private[acronym] object ThesaurusResponse {
-  private val misspellingRegex = """.*Redirecting to /misspelling\?term=([A-Za-z]*)""".r
+  private val misspellingRegex = """misspelling\?term=([A-Za-z]*)"""".r
   private val wordSectorExpression = """<script>window.INITIAL_STATE = (\{.*\})""".r
 
-  def fromHttpResponse(input: String): Either[LookupError, ThesaurusResponse] = input match {
-    case misspellingRegex(term) => Left(Misspelling(term))
-    case _ => wordSectorExpression.findFirstMatchIn(input) match {
-      case Some(jsonSelection) =>
-        Right(new ThesaurusResponse(ConfigFactory.parseString(jsonSelection.group(1))))
+  def fromHttpResponse(input: String): Either[LookupError, ThesaurusResponse] =
+    misspellingRegex.findFirstMatchIn(input) match {
+      case Some(matching) => Left(Misspelling(matching.group(1)))
+      case None => wordSectorExpression.findFirstMatchIn(input) match {
+        case Some(jsonSelection) =>
+          Right(new ThesaurusResponse(ConfigFactory.parseString(jsonSelection.group(1))))
 
-      case None => Left(JsonParsingError("Error while extracting initial state"))
+        case None => Left(JsonParsingError("Error while extracting initial state"))
+      }
     }
-  }
 }
 
 private[acronym] class ThesaurusResponse(json: Config) {
