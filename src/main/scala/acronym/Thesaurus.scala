@@ -27,7 +27,12 @@ class Thesaurus[F[_]](implicit F: Applicative[F], backend: SttpBackend[F, Nothin
       }
 
   private def responseData(request: Request[String, Nothing]): F[LookupErrorOr[String]] =
-    F.map(request.send)(r => r.body.left.map(ServerError))
+    F.map(request.send)(r => r.body match {
+      case Left(value) =>
+        if (value.contains("misspelling?term")) Right(value)
+        else Left(ServerError(value))
+      case Right(value) => Right(value)
+    })
 }
 
 object Thesaurus {
